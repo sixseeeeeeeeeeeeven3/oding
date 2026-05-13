@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Cool Math Script with Terminal Animations
-A visually stunning math demonstration with animations and colors
+A visually stunning interactive math calculator with animations and colors
 """
 
 import time
@@ -66,168 +66,272 @@ def animate_progress_bar(label: str, duration: float = 2.0, color: str = Colors.
     print(f"\n{Colors.GREEN}✓ Complete!{Colors.RESET}\n")
 
 
-def fibonacci_animation(n: int = 10):
-    """Display Fibonacci sequence with animation"""
+def show_result(expression: str, result):
+    """Display result with cool animation"""
+    print(f"\n{Colors.BOLD}{Colors.YELLOW}Calculating: {Colors.CYAN}{expression}{Colors.RESET}")
+    print(f"{Colors.MAGENTA}Processing{Colors.RESET}", end='', flush=True)
+    
+    for _ in range(3):
+        time.sleep(0.3)
+        print(f"{Colors.MAGENTA}.{Colors.RESET}", end='', flush=True)
+    
+    print()
+    time.sleep(0.3)
+    
+    print(f"\n{Colors.BOLD}{Colors.GREEN}RESULT:{Colors.RESET}")
+    print(f"{Colors.CYAN}{result}{Colors.RESET}\n")
+    time.sleep(0.5)
+
+
+def basic_math():
+    """Basic arithmetic operations"""
+    print_header("BASIC ARITHMETIC", Colors.GREEN)
+    
+    try:
+        num1 = float(input(f"{Colors.YELLOW}Enter first number: {Colors.RESET}"))
+        num2 = float(input(f"{Colors.YELLOW}Enter second number: {Colors.RESET}"))
+        
+        print(f"\n{Colors.BOLD}Choose operation:{Colors.RESET}")
+        print(f"{Colors.CYAN}1. Addition (+)")
+        print(f"2. Subtraction (-)")
+        print(f"3. Multiplication (*)")
+        print(f"4. Division (/)")
+        print(f"5. Power (**)")
+        print(f"6. Modulo (%)") 
+        print(f"7. Floor Division (//){Colors.RESET}")
+        
+        choice = input(f"\n{Colors.YELLOW}Choose operation (1-7): {Colors.RESET}")
+        
+        operations = {
+            '1': (f"{num1} + {num2}", num1 + num2),
+            '2': (f"{num1} - {num2}", num1 - num2),
+            '3': (f"{num1} * {num2}", num1 * num2),
+            '4': (f"{num1} / {num2}", num1 / num2 if num2 != 0 else "Error: Division by zero"),
+            '5': (f"{num1} ** {num2}", num1 ** num2),
+            '6': (f"{num1} % {num2}", num1 % num2 if num2 != 0 else "Error: Modulo by zero"),
+            '7': (f"{num1} // {num2}", num1 // num2 if num2 != 0 else "Error: Division by zero"),
+        }
+        
+        if choice in operations:
+            expr, result = operations[choice]
+            show_result(expr, result)
+        else:
+            print(f"{Colors.RED}Invalid choice!{Colors.RESET}")
+    
+    except ValueError:
+        print(f"{Colors.RED}Please enter valid numbers!{Colors.RESET}")
+
+
+def fibonacci():
+    """Generate Fibonacci sequence"""
     print_header("FIBONACCI SEQUENCE", Colors.BLUE)
     
-    fib = [0, 1]
-    for i in range(2, n):
-        fib.append(fib[i-1] + fib[i-2])
-    
-    print(f"{Colors.YELLOW}Calculating {n} Fibonacci numbers...{Colors.RESET}\n")
-    time.sleep(0.5)
-    
-    for i, num in enumerate(fib[:n]):
-        print(f"{Colors.BLUE}{i:2d}. {Colors.CYAN}{num:>15,}{Colors.RESET}", end='')
-        if (i + 1) % 3 == 0:
-            print(f" {Colors.MAGENTA}✨{Colors.RESET}")
-        else:
-            print()
-        time.sleep(0.3)
-    
-    print()
-
-
-def prime_checker_animation(start: int = 1, end: int = 50):
-    """Find and display prime numbers with animation"""
-    print_header("PRIME NUMBER FINDER", Colors.MAGENTA)
-    
-    primes = []
-    print(f"{Colors.YELLOW}Searching for primes between {start} and {end}...{Colors.RESET}\n")
-    
-    for num in range(start, end + 1):
-        is_prime = num > 1 and all(num % i != 0 for i in range(2, int(math.sqrt(num)) + 1))
+    try:
+        n = int(input(f"{Colors.YELLOW}How many Fibonacci numbers? {Colors.RESET}"))
         
-        if is_prime:
-            primes.append(num)
-            print(f"{Colors.GREEN}Found: {Colors.CYAN}{num:>3d}{Colors.RESET} ", end='', flush=True)
-            time.sleep(0.1)
-        else:
-            print(f"{Colors.DIM}.{Colors.RESET}", end='', flush=True)
-            time.sleep(0.05)
-    
-    print(f"\n\n{Colors.BOLD}{Colors.GREEN}Total primes found: {len(primes)}{Colors.RESET}\n")
-
-
-def matrix_rain_math():
-    """Display mathematical operations in matrix style"""
-    print_header("MATHEMATICAL OPERATIONS", Colors.GREEN)
-    
-    operations = [
-        ("2² + 3³ =", 2**2 + 3**3),
-        ("√144 =", math.sqrt(144)),
-        ("sin(π/2) =", math.sin(math.pi/2)),
-        ("cos(0) =", math.cos(0)),
-        ("log₁₀(1000) =", math.log10(1000)),
-        ("e^2 ≈", math.exp(2)),
-        ("π² ≈", math.pi**2),
-    ]
-    
-    for operation, result in operations:
-        print(f"{Colors.MAGENTA}{operation:<20}{Colors.YELLOW}", end='', flush=True)
-        animate_text(f"{result:.6f}", delay=0.02, color=Colors.CYAN)
-        time.sleep(0.3)
-    
-    print()
-
-
-def fractal_tree(n: int = 3):
-    """Display a cool fractal tree visualization"""
-    print_header("FRACTAL TREE (Binary Math)", Colors.RED)
-    
-    def draw_tree(depth: int, width: int = 30, indent: int = 0):
-        if depth == 0:
+        if n <= 0:
+            print(f"{Colors.RED}Please enter a positive number!{Colors.RESET}")
             return
         
-        spaces = " " * (30 - width // 2)
-        branch = "█" * width
+        fib = [0, 1]
+        for i in range(2, n):
+            fib.append(fib[i-1] + fib[i-2])
         
-        color = [Colors.RED, Colors.YELLOW, Colors.GREEN, Colors.CYAN][depth % 4]
-        print(f"{spaces}{color}{branch}{Colors.RESET}")
-        time.sleep(0.3)
+        print(f"\n{Colors.YELLOW}Generating {n} Fibonacci numbers...{Colors.RESET}\n")
+        time.sleep(0.5)
         
-        draw_tree(depth - 1, width // 2 + 1, indent)
-        draw_tree(depth - 1, width // 2 + 1, indent)
-    
-    draw_tree(n)
-    print()
-
-
-def spinning_loader(duration: float = 2.0):
-    """Display spinning loader animation"""
-    spinners = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
-    end_time = time.time() + duration
-    
-    while time.time() < end_time:
-        for spinner in spinners:
-            print(f"\r{Colors.CYAN}{spinner} Processing calculations...{Colors.RESET}", end='', flush=True)
-            time.sleep(0.1)
-    
-    print(f"\r{Colors.GREEN}✓ Done!{Colors.RESET}          \n")
-
-
-def numerical_sequences():
-    """Display cool numerical patterns"""
-    print_header("NUMERICAL PATTERNS", Colors.YELLOW)
-    
-    # Pascal's Triangle
-    print(f"{Colors.BOLD}Pascal's Triangle:{Colors.RESET}\n")
-    for i in range(7):
-        print(" " * (7 - i), end='')
-        for j in range(i + 1):
-            val = math.factorial(i) // (math.factorial(j) * math.factorial(i - j))
-            print(f"{Colors.MAGENTA}{val:>4}{Colors.RESET}", end=' ')
-            time.sleep(0.1)
+        for i, num in enumerate(fib[:n]):
+            print(f"{Colors.BLUE}{i:2d}. {Colors.CYAN}{num:>15,}{Colors.RESET}", end='')
+            if (i + 1) % 3 == 0:
+                print(f" {Colors.MAGENTA}✨{Colors.RESET}")
+            else:
+                print()
+            time.sleep(0.2)
+        
         print()
     
-    print()
+    except ValueError:
+        print(f"{Colors.RED}Please enter a valid number!{Colors.RESET}")
 
 
-def main():
-    """Main function to run all demonstrations"""
-    clear_screen()
+def prime_checker():
+    """Find prime numbers in a range"""
+    print_header("PRIME NUMBER FINDER", Colors.MAGENTA)
     
-    print(f"{Colors.BOLD}{Colors.CYAN}")
-    print("""
+    try:
+        start = int(input(f"{Colors.YELLOW}Start number: {Colors.RESET}"))
+        end = int(input(f"{Colors.YELLOW}End number: {Colors.RESET}"))
+        
+        if start > end:
+            print(f"{Colors.RED}Start must be less than or equal to End!{Colors.RESET}")
+            return
+        
+        primes = []
+        print(f"\n{Colors.YELLOW}Searching for primes between {start} and {end}...{Colors.RESET}\n")
+        
+        for num in range(start, end + 1):
+            is_prime = num > 1 and all(num % i != 0 for i in range(2, int(math.sqrt(num)) + 1))
+            
+            if is_prime:
+                primes.append(num)
+                print(f"{Colors.GREEN}Found: {Colors.CYAN}{num:>3d}{Colors.RESET} ", end='', flush=True)
+                time.sleep(0.1)
+            else:
+                print(f"{Colors.DIM}.{Colors.RESET}", end='', flush=True)
+                time.sleep(0.02)
+        
+        print(f"\n\n{Colors.BOLD}{Colors.GREEN}Total primes found: {len(primes)}{Colors.RESET}\n")
+    
+    except ValueError:
+        print(f"{Colors.RED}Please enter valid numbers!{Colors.RESET}")
+
+
+def scientific_calc():
+    """Scientific calculations"""
+    print_header("SCIENTIFIC CALCULATOR", Colors.MAGENTA)
+    
+    try:
+        print(f"{Colors.CYAN}Available operations:")
+        print(f"1. Square root (√x)")
+        print(f"2. Power (x^y)")
+        print(f"3. Factorial (x!)")
+        print(f"4. Sine (sin)")
+        print(f"5. Cosine (cos)")
+        print(f"6. Tangent (tan)")
+        print(f"7. Logarithm (log)")
+        print(f"8. Natural Log (ln){Colors.RESET}")
+        
+        choice = input(f"\n{Colors.YELLOW}Choose operation (1-8): {Colors.RESET}")
+        
+        if choice == '1':
+            x = float(input(f"{Colors.YELLOW}Enter number: {Colors.RESET}"))
+            result = math.sqrt(x)
+            show_result(f"√{x}", result)
+        
+        elif choice == '2':
+            x = float(input(f"{Colors.YELLOW}Base (x): {Colors.RESET}"))
+            y = float(input(f"{Colors.YELLOW}Exponent (y): {Colors.RESET}"))
+            result = x ** y
+            show_result(f"{x}^{y}", result)
+        
+        elif choice == '3':
+            x = int(input(f"{Colors.YELLOW}Enter number: {Colors.RESET}"))
+            result = math.factorial(x)
+            show_result(f"{x}!", result)
+        
+        elif choice == '4':
+            x = float(input(f"{Colors.YELLOW}Enter angle (degrees): {Colors.RESET}"))
+            result = math.sin(math.radians(x))
+            show_result(f"sin({x}°)", result)
+        
+        elif choice == '5':
+            x = float(input(f"{Colors.YELLOW}Enter angle (degrees): {Colors.RESET}"))
+            result = math.cos(math.radians(x))
+            show_result(f"cos({x}°)", result)
+        
+        elif choice == '6':
+            x = float(input(f"{Colors.YELLOW}Enter angle (degrees): {Colors.RESET}"))
+            result = math.tan(math.radians(x))
+            show_result(f"tan({x}°)", result)
+        
+        elif choice == '7':
+            x = float(input(f"{Colors.YELLOW}Enter number: {Colors.RESET}"))
+            result = math.log10(x)
+            show_result(f"log₁₀({x})", result)
+        
+        elif choice == '8':
+            x = float(input(f"{Colors.YELLOW}Enter number: {Colors.RESET}"))
+            result = math.log(x)
+            show_result(f"ln({x})", result)
+        
+        else:
+            print(f"{Colors.RED}Invalid choice!{Colors.RESET}")
+    
+    except ValueError as e:
+        print(f"{Colors.RED}Error: {e}{Colors.RESET}")
+
+
+def custom_expression():
+    """Evaluate custom mathematical expression"""
+    print_header("CUSTOM MATH EXPRESSION", Colors.YELLOW)
+    
+    print(f"{Colors.CYAN}Enter a math expression (e.g., 2**3 + 5*2, sqrt(16), sin(0)))")
+    print(f"Supported: +, -, *, /, **, %, //, sqrt, sin, cos, tan, log, exp, etc.{Colors.RESET}\n")
+    
+    try:
+        expr = input(f"{Colors.YELLOW}Enter expression: {Colors.RESET}")
+        
+        # Create safe namespace for eval
+        safe_dict = {
+            'sqrt': math.sqrt,
+            'sin': math.sin,
+            'cos': math.cos,
+            'tan': math.tan,
+            'log': math.log,
+            'log10': math.log10,
+            'exp': math.exp,
+            'pi': math.pi,
+            'e': math.e,
+            'factorial': math.factorial,
+            'radians': math.radians,
+            'degrees': math.degrees,
+        }
+        
+        result = eval(expr, {"__builtins__": {}}, safe_dict)
+        show_result(expr, result)
+    
+    except Exception as e:
+        print(f"{Colors.RED}Error: {e}{Colors.RESET}")
+
+
+def main_menu():
+    """Display main menu"""
+    while True:
+        clear_screen()
+        
+        print(f"{Colors.BOLD}{Colors.CYAN}")
+        print("""
     ╔═══════════════════════════════════════════════════════════╗
     ║                                                           ║
-    ║        🚀 COOL MATH WITH AWESOME ANIMATIONS 🚀          ║
+    ║        🚀 COOL INTERACTIVE MATH CALCULATOR 🚀           ║
     ║                                                           ║
     ╚═══════════════════════════════════════════════════════════╝
-    """)
-    print(Colors.RESET)
-    
-    time.sleep(1)
-    
-    # Run all demonstrations
-    animate_progress_bar("Starting math show...", 1.5, Colors.CYAN)
-    
-    fibonacci_animation(12)
-    time.sleep(0.5)
-    
-    prime_checker_animation(1, 60)
-    time.sleep(0.5)
-    
-    matrix_rain_math()
-    time.sleep(0.5)
-    
-    spinning_loader(2.0)
-    
-    numerical_sequences()
-    time.sleep(0.5)
-    
-    fractal_tree(3)
-    time.sleep(0.5)
-    
-    # Final message
-    print_header("🎉 SHOW COMPLETE! 🎉", Colors.GREEN)
-    animate_text("Thanks for watching the cool math animations!", delay=0.03, color=Colors.CYAN)
-    print(f"\n{Colors.BOLD}{Colors.YELLOW}Run this script again to see more!{Colors.RESET}\n")
+        """)
+        print(Colors.RESET)
+        
+        print(f"{Colors.BOLD}{Colors.GREEN}Choose what to calculate:{Colors.RESET}\n")
+        print(f"{Colors.CYAN}1. Basic Arithmetic (+, -, *, /, **, %, //)")
+        print(f"2. Fibonacci Sequence")
+        print(f"3. Prime Number Finder")
+        print(f"4. Scientific Calculator")
+        print(f"5. Custom Expression")
+        print(f"6. Exit{Colors.RESET}\n")
+        
+        choice = input(f"{Colors.YELLOW}Enter your choice (1-6): {Colors.RESET}")
+        
+        if choice == '1':
+            basic_math()
+        elif choice == '2':
+            fibonacci()
+        elif choice == '3':
+            prime_checker()
+        elif choice == '4':
+            scientific_calc()
+        elif choice == '5':
+            custom_expression()
+        elif choice == '6':
+            print(f"\n{Colors.YELLOW}Thanks for using Cool Math! Goodbye!{Colors.RESET}\n")
+            break
+        else:
+            print(f"{Colors.RED}Invalid choice! Please try again.{Colors.RESET}")
+            time.sleep(1)
+        
+        input(f"\n{Colors.BOLD}{Colors.MAGENTA}Press Enter to continue...{Colors.RESET}")
 
 
 if __name__ == "__main__":
     try:
-        main()
+        main_menu()
     except KeyboardInterrupt:
         print(f"\n{Colors.YELLOW}Program interrupted. Goodbye!{Colors.RESET}\n")
     except Exception as e:
